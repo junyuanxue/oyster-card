@@ -22,16 +22,9 @@ describe Oystercard do
     end
   end
 
-  describe "#reduce" do
-    it "should reduce the balance by £10" do
-    	o = Oystercard.new(20)
-    	expect{o.deduct(10)}.to change {o.balance}.by(-10)
-    end
-  end
-
   describe "#touch_in" do
     it "should change travelling status" do
-      subject.top_up(10)	
+      subject.top_up(10)
       subject.touch_in
       expect(subject).to be_in_journey
     end
@@ -46,6 +39,12 @@ describe Oystercard do
     it "should change travelling status" do
       subject.touch_out
       expect(subject).not_to be_in_journey
+    end
+
+    it "should deduct from balance when touching out" do
+      subject.top_up(10)
+      subject.touch_in
+      expect { subject.touch_out }.to change {subject.balance}.by(-described_class::MINIMUM_FARE)
     end
   end
 end
