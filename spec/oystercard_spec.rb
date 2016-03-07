@@ -21,4 +21,9 @@ describe Oystercard do
     message = "Your balance cannot exceed #{described_class::MAXIMUM_BAL}."
     expect{ subject.top_up(amount) }.to raise_error message
   end
+
+  it "should reduce the balance by £10" do
+  	o = Oystercard.new(20)
+  	expect{o.deduct(10)}.to change {o.balance}.by(-10)
+  end
 end
