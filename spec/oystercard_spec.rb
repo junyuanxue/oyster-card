@@ -4,10 +4,15 @@ describe Oystercard do
 
   subject(:oystercard) { described_class.new }
   let(:station) {double :station}
+  let(:station1) {double :station1}
 
-  describe "#balance" do
+  describe "#initialization" do
     it "should have a default balance of 0" do
       expect(subject.balance).to eq 0
+    end
+
+    it "should have an empty history" do
+      expect(subject.history).to eq ({})
     end
   end
 
@@ -43,22 +48,38 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
+    before do
+      subject.top_up(10)
+      subject.touch_in(station)
+    end
+
     it "should change travelling status" do
-      subject.touch_out
+      subject.touch_out(station1)
       expect(subject).not_to be_in_journey
     end
 
     it "should deduct from balance when touching out" do
-      subject.top_up(10)
-      subject.touch_in(station)
-      expect { subject.touch_out }.to change {subject.balance}.by(-described_class::MINIMUM_FARE)
+      expect { subject.touch_out(station1) }.to change {subject.balance}.by(-described_class::MINIMUM_FARE)
     end
 
     it 'should reset entry_station to nil on touch out' do
-    	subject.top_up(10)
-    	subject.touch_in(station)
-    	subject.touch_out
+    	subject.touch_out(station1)
     	expect(subject.entry_station).to eq nil
-	end
+	  end
+
+    it "assigns station to exit station at touch out" do
+    	subject.touch_out(station1)
+      expect(subject.exit_station).to eq station1
+    end
   end
+
+  describe "#record_history" do
+    it "should record journey history" do
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_out(station1)
+      expect(subject.history[station]).to eq station1
+    end
+  end
+
 end
