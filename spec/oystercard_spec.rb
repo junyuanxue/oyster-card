@@ -86,7 +86,9 @@ describe Oystercard do
       expect(oystercard.journeys[0][:exit_station]).to eq exit_station
     end
   end
+
   describe '#journeys' do
+
     it 'starts with no journeys' do
       oystercard.top_up(1)
       expect(oystercard.journeys).to be_empty
@@ -97,8 +99,6 @@ describe Oystercard do
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
       expect(oystercard.journeys.first.values).to eq [entry_station,exit_station]
-
-      # include {:entry_station => entry_station, :exit_station => exit_station}
     end
   end
 end
