@@ -92,11 +92,13 @@ describe Oystercard do
       expect(oystercard.journeys).to be_empty
     end
 
-    # it 'stores one complete journey' do
-    #   oystercard.top_up(1)
-    #   oystercard.touch_in(entry_station)
-    #   oystercard.touch_out(exit_station)
-    #   expect(oystercard.journeys.first).to include {:entry_station => entry_station, :exit_station => exit_station}
-    # end
+    it 'stores one complete journey' do
+      oystercard.top_up(1)
+      oystercard.touch_in(entry_station)
+      oystercard.touch_out(exit_station)
+      expect(oystercard.journeys.first.values).to eq [entry_station,exit_station]
+
+      # include {:entry_station => entry_station, :exit_station => exit_station}
+    end
   end
 end

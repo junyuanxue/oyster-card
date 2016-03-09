@@ -22,7 +22,7 @@
   end
 
   def touch_in(station)
-    raise "You must have over £#{Oystercard::MIN_FARE} on your card" if min_reached?
+    raise "You must have over £#{MIN_FARE} on your card" if min_reached?
     @journey[:entry_station] = station
   end
 
