@@ -2,28 +2,22 @@ require "journeylog"
 
 describe JourneyLog do
 
-  let(:journey_class) { double :journey_class, new: journey }
-  subject(:journeylog) { described_class.new(journey_class) }
   let(:station) { double :station }
   let(:journey) { double :journey }
+  let(:journey_class) { double :journey_class, new: journey }
+  subject(:journeylog) { described_class.new(journey_class) }
 
-  describe "initialization" do
-    it "should have an empty journey history" do
-      expect(subject.journey_history).to be_empty
-    end
-  end
-
-  describe "#start_journey" do
+  describe "#start" do
     it "should start a journey" do
       expect(journey).to receive(:start)
-      subject.start_journey(station)
+      subject.start(station)
     end
   end
 
-  describe "#complete_journey" do
+  describe "#complete" do
     it "should complete a journey" do
       expect(journey).to receive(:complete)
-      subject.complete_journey(station)
+      subject.complete(station)
     end
   end
 

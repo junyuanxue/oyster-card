@@ -4,40 +4,39 @@ class JourneyLog
 
   attr_reader :current_journey
 
-  def initialize(journey_class = Journey)
+  def initialize(journey_class)
     @journey_class = journey_class
     @current_journey = journey_class.new
-    @journey_history = []
+    @history = []
   end
 
-  def start_journey(station)
+  def start(station)
     @current_journey.start(station)
   end
 
-  def complete_journey(station)
+  def complete(station)
     @current_journey.complete(station)
     log
   end
 
-  def journey_history
-    @journey_history.dup
+  def history
+    @history.dup
   end
 
-  def reset_journey
+  def reset
     @current_journey = @journey_class.new
   end
 
   def no_touch_out
     @current_journey.no_touch_out
     log
-    reset_journey
+    reset
   end
-
 
   private
 
     def log
-      @journey_history << @current_journey
+      @history << @current_journey
     end
 
 end
