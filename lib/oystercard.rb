@@ -33,7 +33,7 @@ class Oystercard
   end
 
   def journey_history
-    @journeylog.journey_history
+    @journeylog.history
   end
 
   private
