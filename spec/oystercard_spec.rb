@@ -18,9 +18,9 @@ describe Oystercard do
       expect {oystercard.top_up(10)}.to change{oystercard.balance}.by 10
     end
 
-    it "expects to raise error when max limit exceeded" do
-      fare = Oystercard::MAX_LIMIT + 1
-      message = "Exceeded £#{Oystercard::MAX_LIMIT} limit"
+    it "expects to raise error when max balance exceeded" do
+      fare = Oystercard::MAX_BAL + 1
+      message = Oystercard::MAX_BAL_ERROR
       expect{oystercard.top_up fare}.to raise_error message
     end
   end
@@ -28,7 +28,7 @@ describe Oystercard do
   describe '#touch_in' do
 
     it 'raises error when minimum balance reached' do
-      message = "You must have over £#{Oystercard::MIN_LIMIT} on your card"
+      message = Oystercard::MIN_BAL_ERROR
       expect {oystercard.touch_in(entry_station)}.to raise_error message
     end
 

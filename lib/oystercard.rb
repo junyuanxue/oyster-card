@@ -2,8 +2,10 @@ require_relative 'journey_log'
 
 class Oystercard
   DEFAULT_BALANCE = 0
-  MAX_LIMIT = 90
-  MIN_LIMIT = 1
+  MAX_BAL = 90
+  MIN_BAL = 1
+  MAX_BAL_ERROR = "Exceeded £#{MAX_BAL} limit"
+  MIN_BAL_ERROR = "You must have over £#{MIN_BAL} on your card"
 
   attr_reader :balance, :journey_log
 
@@ -13,12 +15,12 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise "Exceeded £#{MAX_LIMIT} limit" if max_reached?(amount)
+    raise MAX_BAL_ERROR if max_reached?(amount)
     @balance += amount
   end
 
   def touch_in(station)
-    raise "You must have over £#{MIN_LIMIT} on your card" if min_reached?
+    raise MIN_BAL_ERROR if min_reached?
     no_touch_out unless journey_log.journey.nil?
     journey_log.start_journey(station)
   end
@@ -38,11 +40,11 @@ class Oystercard
     end
 
     def max_reached?(amount)
-      @balance + amount > MAX_LIMIT
+      @balance + amount > MAX_BAL
     end
 
     def min_reached?
-      @balance < MIN_LIMIT
+      @balance < MIN_BAL
     end
 
     def deduct
