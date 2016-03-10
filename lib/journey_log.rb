@@ -9,12 +9,12 @@ class JourneyLog
   end
 
   def start_journey(station)
-    @journey = @journey_class.new
+    new_journey
     journey.start(station)
   end
 
   def finish_journey(station)
-    new_journey if journey.nil? || (!journey.entry_station.nil? && !journey.exit_station.nil?)
+    new_journey if journey.nil? || journey.complete?
     journey.finish(station)
     log
   end
