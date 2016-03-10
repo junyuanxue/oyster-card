@@ -31,7 +31,6 @@ class Oystercard
   end
 
   private
-
     def no_touch_out
       if journey_log.journey.exit_station.nil? && !journey_log.journey.entry_station.nil?
         deduct

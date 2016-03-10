@@ -29,7 +29,6 @@ class JourneyLog
   end
 
   private
-
     def new_journey
       @journey = @journey_class.new
     end

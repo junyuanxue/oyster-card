@@ -4,7 +4,6 @@ describe JourneyLog do
   let(:journey_class) {double :journey_class, new: journey}
   let(:journey) { double :journey}
   let(:station) { double :station}
-
   subject(:journey_log) {described_class.new(journey_class)}
 
   describe '#start' do
