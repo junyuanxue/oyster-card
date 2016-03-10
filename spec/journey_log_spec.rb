@@ -15,13 +15,10 @@ describe JourneyLog do
   end
 
   describe '#finish' do
-    context 'journey complete' do
-      it 'finishes a journey' do
-        allow(journey).to receive(:complete?).and_return(true)
-        expect(journey).to receive(:finish)
-        journey_log.finish_journey(station)
-      end
+    it 'finishes a journey when it is complete' do
+      allow(journey).to receive(:complete?).and_return(true)
+      expect(journey).to receive(:finish)
+      journey_log.finish_journey(station)
     end
   end
-
 end

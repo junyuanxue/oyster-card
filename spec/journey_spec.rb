@@ -40,14 +40,24 @@ describe Journey do
   end
 
   describe '#fare' do
-    it 'calculates the fare' do
+    it 'returns penatly fare when journey is incomplete' do
+      expect(journey.fare).to eq Journey::PENALTY_FARE
+    end
+
+    it 'returns minimum fare when travelling in the same zone' do
+      allow(station).to receive(:zone).and_return(1)
+      allow(other_station).to receive(:zone).and_return(1)
       journey.start(station)
       journey.finish(other_station)
       expect(journey.fare).to eq Journey::MIN_FARE
     end
 
-    it 'calculates penatly fare' do
-      expect(journey.fare).to eq Journey::PENALTY_FARE
+    it 'charges £1 more for every zone boundary crossed' do
+      allow(station).to receive(:zone).and_return(2)
+      allow(other_station).to receive(:zone).and_return(4)
+      journey.start(station)
+      journey.finish(other_station)
+      expect(journey.fare).to eq 3
     end
   end
 end

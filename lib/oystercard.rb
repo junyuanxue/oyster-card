@@ -1,7 +1,6 @@
 require_relative 'journey_log'
 
 class Oystercard
-
   DEFAULT_BALANCE = 0
   MAX_LIMIT = 90
   MIN_LIMIT = 1
@@ -49,5 +48,4 @@ class Oystercard
     def deduct
       @balance -= journey_log.journey.fare
     end
-
 end

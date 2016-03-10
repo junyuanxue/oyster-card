@@ -7,7 +7,7 @@ describe Oystercard do
   let(:exit_station) { double :station }
   subject(:oystercard) { described_class.new }
 
-  describe 'new card' do
+  describe 'initialization' do
     it 'with balance of £0' do
       expect(oystercard.balance).to eq 0
     end
@@ -43,10 +43,6 @@ describe Oystercard do
     before do
       oystercard.top_up(1)
       oystercard.touch_in(entry_station)
-    end
-
-    it 'deducts fare from balance after touching out' do
-      expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by -Oystercard::MIN_LIMIT
     end
 
     it 'finishes a journey' do
