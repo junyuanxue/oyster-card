@@ -26,9 +26,8 @@ class Journey
   end
 
   private
-
+  
     def calculate_fare
-      return MIN_FARE if entry_station.zone == exit_station.zone
       (entry_station.zone - exit_station.zone).abs + MIN_FARE
     end
 end

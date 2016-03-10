@@ -1,9 +1,9 @@
 require 'journey'
 
 describe Journey do
-  subject(:journey) {described_class.new}
+  subject(:journey) { described_class.new }
   let(:station) { double :station }
-  let(:other_station) {double :station}
+  let(:other_station) { double :station }
 
   describe '#start' do
     it 'stores the entry station' do
@@ -40,24 +40,38 @@ describe Journey do
   end
 
   describe '#fare' do
-    it 'returns penatly fare when journey is incomplete' do
-      expect(journey.fare).to eq Journey::PENALTY_FARE
+
+    context 'penalty fare' do
+      it 'returns penatly fare for incomplete journeys' do
+        expect(journey.fare).to eq Journey::PENALTY_FARE
+      end
     end
 
-    it 'returns minimum fare when travelling in the same zone' do
-      allow(station).to receive(:zone).and_return(1)
-      allow(other_station).to receive(:zone).and_return(1)
-      journey.start(station)
-      journey.finish(other_station)
-      expect(journey.fare).to eq Journey::MIN_FARE
-    end
+    context 'calculates fare' do
+      def update_zones(entry_zone, exit_zone)
+        allow(station).to receive(:zone).and_return(entry_zone)
+        allow(other_station).to receive(:zone).and_return(exit_zone)
+      end
 
-    it 'charges £1 more for every zone boundary crossed' do
-      allow(station).to receive(:zone).and_return(2)
-      allow(other_station).to receive(:zone).and_return(4)
-      journey.start(station)
-      journey.finish(other_station)
-      expect(journey.fare).to eq 3
+      before do
+        journey.start(station)
+        journey.finish(other_station)
+      end
+
+      it 'returns minimum fare when travelling in the same zone' do
+        update_zones(1, 1)
+        expect(journey.fare).to eq Journey::MIN_FARE
+      end
+
+      it 'calculates fare for zone 2 to zone 4' do
+        update_zones(2, 4)
+        expect(journey.fare).to eq 3
+      end
+
+      it 'calculates fare for zone 6 to zone 1' do
+        update_zones(6, 1)
+        expect(journey.fare).to eq 6
+      end
     end
   end
 end
