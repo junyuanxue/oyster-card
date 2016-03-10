@@ -1,7 +1,8 @@
 require 'oystercard'
 
 describe Oystercard do
-  let(:station){double :station}
+  let(:station){ double :station }
+  let(:journey){ double :journey }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
   subject(:oystercard) {described_class.new}
@@ -24,81 +25,33 @@ describe Oystercard do
     end
   end
 
-  describe '#in_journey' do
+  describe '#touch_in' do
+
+    it 'raises error when minimum balance reached' do
+      message = "You must have over £#{Oystercard::MIN_LIMIT} on your card"
+      expect {oystercard.touch_in(entry_station)}.to raise_error message
+    end
+
+    it 'starts a journey' do
+      oystercard.top_up(1)
+      expect(oystercard.journey).to receive(:start)
+      oystercard.touch_in(entry_station)
+    end
+  end
+
+  describe '#touch_out' do
     before do
       oystercard.top_up(1)
       oystercard.touch_in(entry_station)
     end
 
-    it 'returns status of card' do
-      oystercard.touch_out(exit_station)
-      expect(oystercard).not_to be_in_journey
-    end
-
-    it 'changes status of card to in use after touching in' do
-      expect(oystercard).to be_in_journey
-    end
-
-    it 'changes status of card to not in use after touching out' do
-      oystercard.touch_out(exit_station)
-      expect(oystercard).not_to be_in_journey
-    end
-  end
-
-  describe '#touch_in' do
-
-    it 'raises error when minimum balance reached' do
-      message = "You must have over £#{Oystercard::MIN_FARE} on your card"
-      expect {oystercard.touch_in(entry_station)}.to raise_error message
-    end
-
-    it 'Stores lastest entry station' do
-      oystercard.top_up(1)
-      oystercard.touch_in(entry_station)
-      expect(oystercard.journey[:entry_station]).to eq entry_station
-    end
-  end
-
-  describe '#touch_out' do
-
     it 'deducts fare from balance after touching out' do
-      expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by -Oystercard::MIN_FARE
+      expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by -Oystercard::MIN_LIMIT
     end
 
-    it 'Removes the entry station upon touch out' do
-      oystercard.top_up(1)
-      oystercard.touch_in(entry_station)
+    it 'finishes a journey' do
+      expect(oystercard.journey).to receive(:finish)
       oystercard.touch_out(exit_station)
-      expect(oystercard.journey).to be_empty
-    end
-
-    it 'stores entry station after touching out' do
-      oystercard.top_up(1)
-      oystercard.touch_in(entry_station)
-      oystercard.touch_out(exit_station)
-      expect(oystercard.journeys[0][:entry_station]).to eq entry_station
-    end
-
-    it 'stores exit station upon touch out' do
-      oystercard.top_up(1)
-      oystercard.touch_in(entry_station)
-      oystercard.touch_out(exit_station)
-      expect(oystercard.journeys[0][:exit_station]).to eq exit_station
-    end
-  end
-
-  describe '#journeys' do
-
-    it 'starts with no journeys' do
-      oystercard.top_up(1)
-      expect(oystercard.journeys).to be_empty
-    end
-
-    it 'stores one complete journey' do
-      oystercard.top_up(1)
-      oystercard.touch_in(entry_station)
-      oystercard.touch_out(exit_station)
-      expect(oystercard.journeys.first.values).to eq [entry_station,exit_station]
     end
   end
 end

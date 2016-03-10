@@ -1,15 +1,15 @@
-  class Oystercard
+class Oystercard
 
   DEFAULT_BALANCE = 0
   MAX_LIMIT = 90
-  MIN_FARE = 1
+  MIN_LIMIT = 1
 
   attr_reader :balance, :journeys, :journey
 
-  def initialize
+  def initialize(journey: Journey)
     @balance = DEFAULT_BALANCE
     @journeys = []
-    @journey = {}
+    @journey = journey.new
   end
 
   def top_up(amount)
@@ -17,45 +17,42 @@
     @balance += amount
   end
 
-  def in_journey?
-    !journey.empty?
-  end
-
   def touch_in(station)
-    raise "You must have over £#{MIN_FARE} on your card" if min_reached?
-    @journey[:entry_station] = station
+    raise "You must have over £#{MIN_LIMIT} on your card" if min_reached?
+    no_touch_out
+    journey.start(station)
   end
 
   def touch_out(station)
-     deduct(MIN_FARE)
-     @journey[:exit_station] = station
-     store_journey
+    journey.finish(station)
+    deduct
+    store_journey
   end
 
   private
 
-  def max_reached?(amount)
-    @balance + amount > MAX_LIMIT
-  end
+    def reset
+      @journey
+    end
 
-  def min_reached?
-    @balance < MIN_FARE
-  end
+    def no_touch_out
+      deduct if journey.exit_station.nil? && !journey.entry_station.nil?
+      reset
+    end
 
-  def deduct(fare)
-    @balance -= fare
-  end
+    def max_reached?(amount)
+      @balance + amount > MAX_LIMIT
+    end
 
-  def store_journey
-    completed_journey
-    new_journey
-  end
+    def min_reached?
+      @balance < MIN_LIMIT
+    end
 
-  def completed_journey
-    @journeys << @journey
-  end
+    def deduct
+      @balance -= journey.fare
+    end
 
-  def new_journey
-    @journey = {}
-  end
+    def store_journey
+      @journeys << @journey
+    end
 end
