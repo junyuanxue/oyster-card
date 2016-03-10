@@ -2,5 +2,4 @@
 Oyster card
 -----------
 
-Day one
-Authors : Hanif Fakira Yasmin Green
+Makers Academy week 2 challenge
