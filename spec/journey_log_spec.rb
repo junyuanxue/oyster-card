@@ -15,7 +15,10 @@ describe JourneyLog do
   end
 
   describe '#finish' do
-
+    it 'finishes a journey' do
+      expect(journey).to receive(:finish)
+      journey_log.finish_journey(station)
+    end
   end
 
   describe '#journeys' do
