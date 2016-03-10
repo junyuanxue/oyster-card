@@ -21,7 +21,4 @@ describe JourneyLog do
     end
   end
 
-  describe '#journeys' do
-
-  end
 end

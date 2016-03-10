@@ -1,11 +1,11 @@
 require 'oystercard'
 
 describe Oystercard do
-  let(:station){ double :station }
-  let(:journey){ double :journey }
+  let(:station) { double :station }
+  let(:journey_log) { double :journey_log }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
-  subject(:oystercard) {described_class.new}
+  subject(:oystercard) { described_class.new }
 
   describe 'new card' do
     it 'with balance of £0' do
@@ -34,7 +34,7 @@ describe Oystercard do
 
     it 'starts a journey' do
       oystercard.top_up(1)
-      expect(oystercard.journey).to receive(:start)
+      expect(oystercard.journey_log).to receive(:start_journey)
       oystercard.touch_in(entry_station)
     end
   end
@@ -50,7 +50,7 @@ describe Oystercard do
     end
 
     it 'finishes a journey' do
-      expect(oystercard.journey).to receive(:finish)
+      expect(oystercard.journey_log).to receive(:finish_journey)
       oystercard.touch_out(exit_station)
     end
   end
