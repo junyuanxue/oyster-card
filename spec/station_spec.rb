@@ -1,15 +1,17 @@
 require 'station'
 
-describe Station do 
+describe Station do
+  subject(:station) { described_class.new("Aldgate", 1) }
 
-	it "on initialize should have a name" do	
-		station1 = Station.new(:euston, 1)	
-		expect(station1.name).to eq :euston
-	end
+  describe '#name' do
+    it 'starts with a name' do
+      expect(station.name).to eq 'Aldgate'
+    end
+  end
 
-	it "on initialize should have a zone" do
-		station1 = Station.new(:euston, 1)
-		expect(station1.zone).to eq 1
-	end
-
+  describe '#zone' do
+    it 'starts with a zone' do
+      expect(station.zone).to eq 1
+    end
+  end
 end
