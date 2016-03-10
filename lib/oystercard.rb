@@ -20,7 +20,7 @@ class Oystercard
 
   def touch_in(station)
     raise "You must have over £#{MIN_LIMIT} on your card" if min_reached?
-    no_touch_out
+    # no_touch_out
     journey_log.start_journey(station)
   end
 
