@@ -20,7 +20,7 @@ class Oystercard
 
   def touch_in(station)
     raise "You must have over £#{MIN_LIMIT} on your card" if min_reached?
-    # no_touch_out
+    no_touch_out unless journey_log.journey.nil?
     journey_log.start_journey(station)
   end
 
@@ -31,13 +31,11 @@ class Oystercard
 
   private
 
-    # def reset
-    #   @journey
-    # end
-
     def no_touch_out
-      deduct if journey_log.journey.exit_station.nil? && !journey_log.journey.entry_station.nil?
-      #reset
+      if journey_log.journey.exit_station.nil? && !journey_log.journey.entry_station.nil?
+        deduct
+        journey_log.no_touch_out
+      end
     end
 
     def max_reached?(amount)

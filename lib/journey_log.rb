@@ -16,7 +16,6 @@ class JourneyLog
   def finish_journey(station)
     new_journey if journey.nil? || (!journey.entry_station.nil? && !journey.exit_station.nil?)
     journey.finish(station)
-    # current_journey
     log
   end
 
@@ -24,11 +23,12 @@ class JourneyLog
     @journeys.dup
   end
 
-  private
+  def no_touch_out
+    log
+    new_journey
+  end
 
-    # def current_journey
-    #   return @journey unless journey.complete?
-    # end
+  private
 
     def new_journey
       @journey = @journey_class.new
